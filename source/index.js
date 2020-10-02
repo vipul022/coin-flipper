@@ -41,7 +41,7 @@ const port = 3000;
 
 app.use(express.json());
 
-app.get(`/greeter`, (req, res) => {
+app.get(`/greeter/:name`, (req, res) => {
   try {
     if (req.method !== "GET") {
       console.log("hello");
