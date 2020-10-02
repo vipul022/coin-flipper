@@ -41,11 +41,30 @@ const port = 3000;
 
 app.use(express.json());
 
-app.get(`/greeter/:name`, (req, res) => {
-  console.log("inside get req");
-  console.log(req.params);
-  const { name } = req.params;
-  res.send(`Hello ${name} `);
+app.get(`/greeter`, (req, res) => {
+  try {
+    if (req.method !== "GET") {
+      console.log("hello");
+      // res.send("hello");
+      throw new Error("Invalid Route!");
+    }
+    // console.log("inside get req");
+    // console.log("req=> ", req.method);
+    // console.log("req.params =>", req.params);
+
+    const { name } = req.params;
+
+    console.log("name=> ", name);
+
+    res.json({
+      message: `Hello ${name}`,
+    });
+  } catch (err) {
+    // console.log("hiiii");
+    res.json({
+      error: err.message,
+    });
+  }
 });
 
 let coin = ["heads", "tails"];
@@ -58,7 +77,7 @@ app.get("/coinflip", (req, res) => {
 });
 
 let headOrTails = (req, res, next) => {
-  let coin = ["heads", "tails"];
+  // let coin = ["heads", "tails"];
   let { num } = req.params;
   // console.log(num);
   let head = 0;
@@ -75,4 +94,12 @@ let headOrTails = (req, res, next) => {
 app.get("/coinflip/:num", headOrTails, (req, res) => {
   res.send(req.result);
 });
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+const server = app.listen(port, () =>
+  console.log(`Example app listening on port ${port}!`)
+);
+
+module.exports = {
+  app,
+  server,
+};
